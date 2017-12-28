@@ -1,13 +1,13 @@
 package com.krish.retrofit.cache;
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
+import java.sql.SQLException;
 
 import com.hazelcast.config.Config;
 import com.hazelcast.config.JoinConfig;
 import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
 import com.hazelcast.core.IQueue;
 
 /**
@@ -47,9 +47,13 @@ public class CacheProvider
 		}
 		return cache;
 	}
-	public int getCacheSize(){
+	public int getCacheSize() throws SQLException{
 		  IQueue<String> cacheQ = cacheInstance.getQueue("AdminData");
-	        System.out.println("Size ::: "+cacheQ.size());
+		  IMap<Integer, GatingTableData> gatingDataCache = cacheInstance.getMap("GatingData");
+		  for(Integer key :H2DataBaseProvider.getAllTableData("PERSON").keySet()) {
+			  System.out.println("__"+key+"----"+H2DataBaseProvider.getAllTableData("PERSON").get(key));
+		  }
+		  System.out.println("Size ::: "+cacheQ.size());
 		return cacheQ.size() ;
 	}
 	public void updateCache(){
@@ -64,4 +68,3 @@ public class CacheProvider
    CacheProvider.getCacheProvider().updateCache();
    CacheProvider.getCacheProvider().getCacheSize();
  */
-*/
